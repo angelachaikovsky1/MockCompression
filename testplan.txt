@@ -1,0 +1,205 @@
+﻿Command-Line Possible Errors:
+Command Line: ./fileCompressor 
+Description: Input is only the executable and does not include any flags or any textfiles. 
+Results in a warning that there are not enough arguments.
+
+
+Command Line: ./fileCompressor -b
+Description: Input is only the executable and a flag and does not include any textfiles. 
+Results in a warning that there are not enough arguments.
+
+
+Command Line: ./fileCompressor -b <insert file name that does not exist>
+Description: Input includes the executable, the flag(add HuffmanCodeBook if flag is ‘c’ or ‘d’), and the name of a file that does not exist. Results in a warning that a valid file name was not provided.
+
+
+Command Line: ./fileCompressor -g <insert file name> HuffmanCodeBook
+Description: Input is the executable, a flag that does not exist, the name of a valid file, and the HuffmanCodeBook. Results in a warning that the “-g” flag is not recognized.
+
+
+Command Line: ./fileCompressor -c <insert file name> < insert invalid HuffmanCodeBook name>
+Description: Input is the executable, a valid flag, a valid file name, and an invalid HuffmanCodeBook name. Results in a warning that the invalid HuffmanCodeBook name does not exist.
+
+
+Command Line: ./fileCompressor -R -b <insert invalid directory name>
+Description: Input is the executable, the recursive flag, another valid flag(add HuffmanCodeBook if flag is ‘c’ or ‘d’), and the invalid directory name. Results in a warning that the given directory does not exist.
+
+
+Command Line: ./fileCompressor -R -b <insert valid file name>
+Description: Input is the executable, the recursive flag, another valid flag(add HuffmanCodeBook if flag is ‘c’ or ‘d’), and the valid file name. Results in a warning that the given valid file is not a directory
+
+
+Command Line: ./fileCompressor -R -b <insert empty directory>
+Description: Input is the executable, the recursive flag, another valid flag(add HuffmanCodeBook if flag is ‘c’ or ‘d’), and the name of an empty directory. Results in a warning that there is no data to be encoded.
+
+
+
+
+Command Line: ./fileCompressor -R -c <insert directory> <insert empty HuffmanCodeBook>
+Description: Input is the executable, the recursive flag, either ‘c’ or ‘d’ flag, a valid directory, and an empty HuffmanCodeBook file. This results in a warning that the HuffmanCodeBook file is empty.
+
+
+Command Line: ./fileCompressor -c <valid “.hcz” file> HuffmanCodeBook
+Description: Input is the executable, the ‘c’ flag, the name of a valid “.hcz file”, and a valid HuffmanCodeBook. Results in a warning that the given file is already compressed. 
+
+
+Command Line: ./fileCompressor -d <valid text file that is not “.hcz”> HuffmanCodeBook
+Description: Input is the executable, the ‘c’ flag, the name of a valid text file that is not a  “.hcz file”, and a valid HuffmanCodeBook. Results in a warning that the given file is already decompressed. 
+
+
+Command Line: ./fileCompressor -d <valid text file that is not “.hcz”> HuffmanCodeBook
+Description: Input is the executable, the ‘c’ flag, the name of a valid text file that is not a  “.hcz file”, and a valid HuffmanCodeBook. Results in a warning that the given file is already decompressed. 
+
+
+Command Line: ./fileCompressor -b <valid “.hcz” file>
+Description: Input is the executable, the ‘b’ flag, and the name of a valid “.hcz” file. Results in a warning that the given file is already compressed and that a HuffmanCodeBook can’t be generated. 
+
+
+
+
+Text File Issues:
+        
+Escape Code:
+        
+The escape code that we use is an exclamation mark or a series of exclamation marks depending on the content of the file. To prevent the program from misinterpreting any exclamation marks that naturally occur within the text file, the program appends an exclamation mark to the escape code until the escape code contains one more consecutive exclamation mark than the number of consecutive exclamation marks that occur within the text file. So for example, if the text file were to be the following:
+
+
+Hi! My name is Bob!! Welcome to !!!CS214!!!
+
+
+The escape code, in this case, would be “!!!!” or four consecutive exclamation marks since there are three consecutive exclamation marks within the text file, specifically BEFORE a word (this could interfere with the reading, so 1 more ! is always appended. 
+
+
+Characters In “.hcz” File That Are Not ‘1’ or ‘0’:
+
+
+When decompressing a file, if there is a character within the compressed Huffman code that is not either a ‘0’ or a ‘1’, our program handles this by skipping over this character and continues to decompress the file. 
+
+
+Example Test Cases:
+
+
+Text File Name: test.txt
+
+
+test.txt content(Includes a newline at the end): 
+
+
+The fear of the number 13 is called triskaidekaphobia. It is impossible to hum while holding your nose.
+
+
+Command Line Argument to Build: ./fileCompressor -b test.txt
+
+
+HuffmanCodeBook Content:        
+!        
+0        !s
+10000        number
+10001        called
+1001        is
+10100        nose.
+10101        13
+10110        fear
+10111        !n
+11000        It
+11001        your
+11010        to
+11011        triskaidekaphobia.
+11100        while
+111010        The
+111011        Impossible
+111100        of
+111101        hum
+111110        the
+111111        holding
+Command Line Argument To Compress: ./fileCompressor -c test.txt HuffmanCodeBook
+
+
+test.txt.hcz Content:
+
+
+11101001011001111000111110010000010101010010100010110110110000100101110110110100111101011100011111101100101010010111
+
+
+Command Line Argument To Decompress: ./fileCompressor -d test.txt.hcz HuffmanCodeBook
+
+
+test.txt content(Includes a newline at the end): 
+
+
+The fear of the number 13 is called triskaidekaphobia. It is impossible to hum while holding your nose.
+
+
+
+
+Example Test Case(Recursive):
+
+
+Directory Name: ./sampleDirectory
+
+
+Text File Names: file1.txt and file2.txt are located within ./sampleDirectory
+
+
+file1.txt content(includes a newline at the end):
+
+
+The word “strengths” is the longest word in the English language with only one vowel.
+
+
+file2.txt content(includes a newline at the end):
+
+
+Lego is the largest tire manufacturer in the world.
+
+
+Command Line Argument to Build: ./fileCompressor -R -b ./sampleDirectory
+
+
+HuffmanCodeBook Content:
+
+
+!
+0        !s
+1000        in
+10010        The
+10011        vowel.
+10100        world.
+10101        tire
+101100        "strengths"
+101101        longest
+10111        is
+110000        English
+110001        with
+110010        language
+110011        one
+11010        word
+110110        manufacturer
+110111        largest
+111000        Lego
+111001        only
+11101        !n
+1111        the
+
+
+file1.txt content:
+10010011010010110001011101111010110101101001000011110110000011001001100010111001011001101001111101
+file2.txt content
+1110000101110111101101110101010110110010000111101010011101
+
+
+Decompression with command line:
+
+
+ ./fileCompressor -R -d ./sampleDirectory HuffmanCodeBook
+
+
+File1.txt: 
+The word "strengths" is the longest word in the English language with only one vowel.
+
+
+File2.txt:
+Lego is the largest tire manufacturer in the world.
+
+
+We also tried for massive files of 2mB large. And works with a difference of 0.
